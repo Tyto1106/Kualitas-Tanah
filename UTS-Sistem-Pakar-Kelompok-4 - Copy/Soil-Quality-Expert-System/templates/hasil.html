@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Diagnosa</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-image: url('{{ url_for("static", filename="pict1.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(5px);
+            font-family: Arial, sans-serif;
+            height: 300vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .diag-container {
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.85);
+            text-align: center;
+            animation: fadeIn 1.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #997950;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .highlight-ikt {
+            font-size: 48px;
+            font-weight: bold;
+            color: #c0392b;
+            margin: 15px 0;
+        }
+
+        .penyakit-utama {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #3e3e3e;
+            font-weight: bold;
+        }
+
+        .percentage {
+            font-size: 20px;
+            font-weight: bold;
+            color: #3e94a3;
+            margin: 10px 0;
+        }
+
+        .solution {
+            text-align: left;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        .solution h3 {
+            color: #5a5a5a;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            color: #fff;
+            background: #997950;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: #7a5f4a;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="diag-container">
+        <h2>Hasil Diagnosa</h2>
+        
+        <!-- Menampilkan IKT dengan prioritas -->
+        <div>
+            <p class="highlight-ikt">IKT: {{ ikt }} / 54</p>
+            <p class="penyakit-utama">Kategori: {{ kategori }}</p>
+            <p> 
+                IKT = Indeks Kesehatan Tanah 
+            </p>
+        </div>
+
+        <!-- Solution Section -->
+        <div class="solution">
+            <h3>Skor setiap faktor:</h3>
+                <ul>
+                    {% for factor, score in lowest_factors %}
+                    <li>{{ factor }}: Skor {{ score }}</li>
+                    {% endfor %}
+                </ul>
+            <h4>Rekomendasi Perbaikan untuk faktor yang memiliki skor dibawah 4:</h4>
+            <p>Kestabilan Agregat<br>
+                Solusi:<br>
+                1.	Tambahkan bahan organik seperti pupuk kompos atau pupuk kandang untuk memperbaiki struktur tanah.<br>
+                2.	Lakukan penanaman tanaman penutup tanah (cover crop) untuk mengurangi erosi dan memperbaiki agregat tanah.<br>
+                3.	Hindari penggunaan alat berat untuk mencegah pemadatan tanah.<br>
+                4.	Terapkan sistem olah tanah konservasi (minimum tillage).<br><br>
+                
+                Infiltrasi<br>
+                Solusi:<br>
+                1.	Perbaiki kandungan bahan organik tanah untuk meningkatkan kemampuan tanah menyerap air.<br>
+                2.	Buat saluran resapan atau sumur resapan untuk mengurangi aliran permukaan.<br>
+                3.	Tanam vegetasi dengan sistem akar dalam untuk meningkatkan porositas tanah.<br>
+                4.	Hindari irigasi berlebihan yang dapat memperparah kompaksi tanah.<br><br>
+                
+                Kedalaman Efektif<br>
+                Solusi:<br>
+                1.	Lakukan pengolahan tanah secara mendalam (deep tillage) untuk memecah lapisan keras (hardpan).<br>
+                2.	Terapkan teknik subsoiling untuk meningkatkan kedalaman perakaran.<br>
+                3.	Tambahkan gypsum jika lapisan keras disebabkan oleh salinitas atau natrium.<br>
+                4.	Tanam tanaman dengan akar serabut atau tanaman leguminosa yang dapat membantu memperbaiki struktur tanah.<br><br>
+                
+                pH Tanah<br>
+                Solusi untuk pH rendah (asam):<br>
+                1.	Tambahkan kapur pertanian (kalsit/dolomit) sesuai dosis yang disarankan.<br>
+                2.	Terapkan pupuk organik untuk menyeimbangkan keasaman tanah.<br>
+                3.	Hindari penggunaan pupuk amonium dalam jumlah besar.<br>
+                Solusi untuk pH tinggi (basa):<br>
+                1.	Tambahkan bahan pembenah seperti sulfur elemental untuk menurunkan pH.<br>
+                2.	Gunakan pupuk berbasis amonium sulfat.<br>
+                3.	Tanam tanaman toleran pH tinggi seperti sorgum atau barley.<br><br>
+                
+                Banyaknya Perakaran<br>
+                Solusi:<br>
+                1.	Pilih tanaman dengan akar yang agresif seperti tanaman kacang-kacangan atau rumput gajah.<br>
+                2.	Terapkan teknik pemangkasan akar (root pruning) pada tanaman tertentu untuk mendorong perkembangan akar baru.<br>
+                3.	Tambahkan mikoriza (jamur akar) untuk meningkatkan kemampuan tanaman menyerap nutrisi.<br>
+                4.	Pastikan ketersediaan air dan nutrisi yang cukup di lapisan tanah.<br><br>
+                
+                Populasi Cacing <br>
+                Solusi:<br>
+                1.	Hindari penggunaan pestisida kimia yang dapat membunuh cacing tanah.<br>
+                2.	Tambahkan bahan organik seperti limbah dapur, dedaunan, atau pupuk kompos.<br>
+                3.	Jaga kelembaban tanah dengan mulsa organik.<br>
+                4.	Hindari pemadatan tanah yang menghambat pergerakan cacing.<br><br>
+            </p>
+            
+        </div>
+    
+        <div class="button-container">
+            <button onclick="window.location.href='{{ url_for('start') }}'">Kembali ke Halaman Utama</button>
+        </div>
+    </div>
+</body>
+</html>
